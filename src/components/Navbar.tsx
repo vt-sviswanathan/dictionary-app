@@ -4,7 +4,7 @@ const Navbar = () => {
     return(
         <div className="navbar">
             <h1>
-                Lets find the meanings!
+                Let&apos;s find the meanings!
             </h1>
         </div>
     )

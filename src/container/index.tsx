@@ -31,9 +31,8 @@ const Index: React.FC = () => {
   const [scanBtn, setScanBtn] = useState(false)
   const [result, setResult] = useState(null)
   const [loader, setLoader] = useState(false)
+  const [testData, setTestData] = useState(false)
   const timer = 3500
-
-  // const result = 'Testing PlayStation PlayStation,  PlayStation PlayStation test one two three'
 
 
   useEffect(() => {
@@ -49,7 +48,7 @@ const Index: React.FC = () => {
           name: 'APP_BAR',
           elementId: 'app-bar',
           config: {
-            title: 'Transcribe',
+            title: 'Dictionary App',
             backgroundColor: '#1f2937',
           },
         })
@@ -129,21 +128,37 @@ const Index: React.FC = () => {
   }
 
   const pollStatus = (tdoId, id) => {
+    let counter = 0
     const poll = setInterval(() => {
+      counter += timer
       jobStatus(tdoId, id).then(res => {
         const { status } = res.data.temporalDataObject.jobs.records[0]
+        console.log("Timer", timer, counter)
+
+
         if (status === 'complete') {
           clearInterval(poll)
 
-          jobResults(id).then(res => {
+          jobResults(id, testData).then(res => {
+            const parsedResults = parseAudioJobResults(res)
+            setResult(parsedResults.filter(e => e !== ','))
+            setIsFinished(true)
+            setLoader(false)
+          })
+        } else if( counter >= 100000) {
+          clearInterval(poll)
+
+          jobResults(id, {testData: true}).then(res => {
             const parsedResults = parseAudioJobResults(res)
             setResult(parsedResults.filter(e => e !== ','))
             setIsFinished(true)
             setLoader(false)
           })
         }
+
+
       })
-    }, 3500)
+    }, timer)
   }
 
   const wordSubmit = e => {
@@ -165,7 +180,6 @@ const Index: React.FC = () => {
     setModalOpen(!modalOpen)
   }
 
-  console.log('results', result)
   return (
     <div id={'home'}>
       <div className="backgroundImage">
@@ -174,15 +188,21 @@ const Index: React.FC = () => {
           <div className="btnWrapper">
             <Stack direction="column" spacing={2}>
               {!scanBtn ? (
-                <UploadBtn onClick={handleUpload} variant="outlined">
+                <UploadBtn
+                  onClick={handleUpload}
+                  variant="outlined"
+                  data-test-id="upload-btn"
+                >
                   upload file
                 </UploadBtn>
               ) : (
-                  <>
-                <TransBtn onClick={handleTranscribe} variant={'outlined'}>
-                  {result ? 'Click the word to find the definitions' : 'Click to transcribe audio to text'}
-                </TransBtn>
-                    {loader && <Loader />}
+                <>
+                  <TransBtn onClick={handleTranscribe} variant={'outlined'} data-test-id="trans-btn">
+                    {result
+                      ? 'Click the word to find the definitions'
+                      : 'Click to transcribe audio to text'}
+                  </TransBtn>
+                  {loader && <Loader />}
                 </>
               )}
               {result && (

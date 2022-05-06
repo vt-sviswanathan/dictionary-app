@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React from 'react'
 import { Container, Dialog, DialogContent } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
@@ -10,7 +10,7 @@ type Props = {
   closeModal: any
 }
 
-const Modal: FC<Props> = ({
+const Modal: React.FC<Props> = ({
   word,
   dictionaryResponse,
   modalOpen,
