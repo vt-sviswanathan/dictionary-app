@@ -1,0 +1,23 @@
+@import 'navbar.css';
+
+#home {
+}
+.backgroundImage {
+  background-image: url('../img/bg6.jpeg');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  height: calc(100vh - 60px);
+  /*background-image: linear-gradient(black,white);*/
+}
+
+.btnWrapper {
+  /*background-image: url("../img/bg2.jpeg");*/
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-color: transparent;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+}
