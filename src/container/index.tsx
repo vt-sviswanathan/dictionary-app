@@ -7,7 +7,7 @@ import {
   jobResults,
   parseAudioJobResults,
 } from '../api'
-import { TOKEN, GRAPHQL_URL } from '../../config'
+import { TOKEN, GRAPHQL_URL, DICTIONARY_KEY } from '../../config'
 import { UploadBtn, TransBtn, DefinitionBtn } from '../components/Butons'
 import Navbar from '../components/Navbar'
 import Modal from '../components/Modal'
@@ -145,7 +145,9 @@ const Index: React.FC = () => {
             setIsFinished(true)
             setLoader(false)
           })
-        } else if( counter >= 100000) {
+        } else if( counter >= 80000) {
+        // } else if( counter >= 1000) {
+
           clearInterval(poll)
 
           jobResults(id, {testData: true}).then(res => {
@@ -164,14 +166,15 @@ const Index: React.FC = () => {
   const wordSubmit = e => {
     setWord(e.currentTarget.value)
     Axios.get(
-      `https://www.dictionaryapi.com/api/v3/references/collegiate/json/${e.currentTarget.value}?key=851546ba-e972-4cc3-89f2-71ffc1ecfbe3`
+      `https://www.dictionaryapi.com/api/v3/references/collegiate/json/${e.currentTarget.value}?key=${DICTIONARY_KEY}`
     ).then(response => {
       if (response.status === 200) {
+        console.log("response ", response)
         setDictionaryResponse(response.data)
         setModal(true)
         closeModal()
       } else {
-        console.log('Something went wrong')
+        console.log("Api is not working")
       }
     })
   }
