@@ -17,16 +17,18 @@ const Modal: FC<Props> = ({
   closeModal,
 }) => {
   console.log("Modal    ---")
-  console.log("Modal    --- word", word)
+  console.log("Modal    --- word", {word, dictionaryResponse})
 
-  const data = dictionaryResponse.length !== 0 ? dictionaryResponse.data : ''
+  // const data = dictionaryResponse.length !== 0 ? dictionaryResponse.data : ''
+  const data = dictionaryResponse
+
   console.log('def. data. shortdef data', data)
 
   return (
     <>
       <Dialog
         fullWidth
-        maxWidth="md"
+        maxWidth="sm"
         open={modalOpen}
         scroll="paper"
         onClose={closeModal}

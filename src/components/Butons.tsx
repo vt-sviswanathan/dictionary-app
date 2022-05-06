@@ -4,7 +4,7 @@ import {Button} from "@mui/material";
  const UploadBtn = styled(Button)({
     height: '50px',
     border: '1px solid #42BCB6',
-    margin: '20px auto',
+    margin: '110px auto 20px',
     display: 'block',
     backgroundColor: '#59D4CE',
     '&:hover': {
@@ -15,7 +15,7 @@ import {Button} from "@mui/material";
  const TransBtn = styled(Button)({
     height: '50px',
     border: '1px solid #42BCB6',
-    margin: '20px auto',
+     margin: '110px auto 20px',
     display: 'block',
     backgroundColor: '#59D4CE',
     '&:hover': {

@@ -21,3 +21,16 @@
   display: flex;
   justify-content: center;
 }
+
+.resultContainer {
+  width: 600px;
+  display: block;
+  margin: 30px auto;
+  background-color: rgb(0 0 0 / 12%);
+  padding: 20px;
+}
+.wordBtn {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}

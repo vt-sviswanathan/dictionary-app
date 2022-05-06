@@ -24,71 +24,15 @@ const Index: React.FC = () => {
   const [file, setFile] = useState(null)
   const [dictionaryResponse, setDictionaryResponse] = useState(null)
   const [word, setWord] = useState('')
+  const [modal, setModal] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const [isFinished, setIsFinished] = useState(false)
   const [transcribeDuration, setTranscribeDuration] = useState(0)
   const [scanBtn, setScanBtn] = useState(false)
   const [result, setResult] = useState(null)
-  // const [newResult, setNewResult] = useState('')
   const timer = 3500
 
-  //Testing PlayStation PlayStation PlayStation PlayStation test one two three
-  // const result = 'Testing PlayStation PlayStation PlayStation PlayStation test one two three'
-  // var str = "This is an simple sentence.";
-  // const result = [
-  //   'Let',
-  //   'us',
-  //   'invent',
-  //   'technologies',
-  //   'like',
-  //   'computers',
-  //   ',',
-  //   'digital',
-  //   'cameras',
-  //   ',',
-  //   'LEDs',
-  //   ',',
-  //   'screens',
-  //   ',',
-  //   'lasers',
-  //   ',',
-  //   'nuclear',
-  //   'power',
-  //   'plants',
-  //   ',',
-  //   'you',
-  //   'know',
-  //   ',',
-  //   'you',
-  //   "don't",
-  //   'really',
-  //   'want',
-  //   'to',
-  //   'build',
-  //   'a',
-  //   'nuclear',
-  //   'power',
-  //   'plant',
-  //   'if',
-  //   'you',
-  //   "don't",
-  //   'really',
-  //   'understand',
-  //   'how',
-  //   'it',
-  //   'works',
-  // ]
-
-  // let newResult = ''
-  // if (result) {
-  //   let newResult =''
-  //   result.map((item, index) => {
-  //     newResult += item + ' '
-  //     // console.log(item+ ' ')
-  //   })
-  //
-  //   setNewResult(newResult)
-  // }
+  // const result = 'Testing PlayStation PlayStation,  PlayStation PlayStation test one two three'
 
 
   useEffect(() => {
@@ -129,7 +73,6 @@ const Index: React.FC = () => {
             if (confirmCancel !== null) {
               confirmCancel.click()
             }
-            console.log('File test test test test ', file)
             setScanBtn(true)
           }, 500)
         })
@@ -140,7 +83,6 @@ const Index: React.FC = () => {
               alert('Error during the file upload!')
               throw error
             }
-            // console.log('Progress: 1111111111111 ', file)
           }
         )
       }
@@ -177,8 +119,6 @@ const Index: React.FC = () => {
       .then(response => {
         const id = response.data.launchSingleEngineJob.id
         const targetId = response.data.launchSingleEngineJob.targetId
-        console.log('response =====', { response, targetId, id })
-
         pollStatus(targetId, id)
       })
       .catch(err => {
@@ -187,24 +127,23 @@ const Index: React.FC = () => {
   }
 
   const pollStatus = (tdoId, id) => {
-    // let counter = 0;
     const poll = setInterval(() => {
-      // counter += API_POLL_FREQUENCY;
       jobStatus(tdoId, id).then(res => {
         const { status } = res.data.temporalDataObject.jobs.records[0]
         if (status === 'complete') {
           clearInterval(poll)
 
           jobResults(id).then(res => {
-            console.log('parseAudioJobResults ------', res)
-
             const parsedResults = generateAudioJobResults(
               parseAudioJobResults(res)
             )
 
             console.log('REsult REsult Result', parsedResults)
             // needed this
-            setResult(parsedResults)
+            // console.log('remove comaa 1111', parsedResults.replaceAll(',', ''))
+            //
+            // console.log('remove comaa', parsedResults.replace(/,/g, ''))
+            setResult(parsedResults.filter(e => e !== ','))
             setIsFinished(true)
           })
         }
@@ -212,15 +151,16 @@ const Index: React.FC = () => {
     }, 3500)
   }
 
-  const wordSubmit = (e) => {
-    console.log('e.target.value',e.target.value)
+  const wordSubmit = e => {
+    console.log('e.target.value', e.target.value)
     setWord(e.currentTarget.value)
     Axios.get(
       `https://www.dictionaryapi.com/api/v3/references/collegiate/json/${e.currentTarget.value}?key=851546ba-e972-4cc3-89f2-71ffc1ecfbe3`
     ).then(response => {
       if (response.status === 200) {
-        setDictionaryResponse(response)
-        setModalOpen(true)
+        setDictionaryResponse(response.data)
+        setModal(true)
+        closeModal()
       } else {
         console.log('Something went wrong')
       }
@@ -228,17 +168,10 @@ const Index: React.FC = () => {
   }
 
   const closeModal = () => {
-    console.log('I am herer')
     setModalOpen(!modalOpen)
   }
-  const test = () => {
-    console.log('I am herer test')
 
-    setModalOpen(true)
-  }
-
-  console.log("word ------", word)
-
+  console.log('results', result)
   return (
     <div id={'home'}>
       <div className={!dictionaryResponse && 'backgroundImage'}>
@@ -247,45 +180,43 @@ const Index: React.FC = () => {
           <div className="btnWrapper">
             <Stack direction="column" spacing={2}>
               {!scanBtn ? (
-                  <UploadBtn onClick={handleUpload} variant="outlined">
-                    upload file
-                  </UploadBtn>
+                <UploadBtn onClick={handleUpload} variant="outlined">
+                  upload file
+                </UploadBtn>
               ) : (
-                  <TransBtn onClick={handleTranscribe} variant={'outlined'}>
-                    Transcribe audio to text
-                  </TransBtn>
+                <TransBtn onClick={handleTranscribe} variant={'outlined'}>
+                  {result ? 'Click the word to find the definitions' : 'Click to transcribe audio to text'}
+                </TransBtn>
               )}
-              <div
-                  style={{
-                    width: '600px',
-                    display: 'block',
-                    margin: '0 auto',
-                  }}
-              >
-                {result && result.map((item, index) => {
-                  return (
+              {result && (
+                <div className="resultContainer">
+                  {result.map((item, index) => {
+                    return (
                       <button
-                          value={item}
-                          key={index}
-                          style={{
-                            border: 'none',
-                            backgroundColor: 'transparent',
-                            cursor: 'pointer',
-                          }}
-                          onClick={(e) => wordSubmit(e)}
+                        value={item}
+                        key={index}
+                        style={{
+                          border: 'none',
+                          backgroundColor: 'transparent',
+                          cursor: 'pointer',
+                        }}
+                        className="wordBtn"
+                        onClick={e => wordSubmit(e)}
                       >
                         {item}{' '}
                       </button>
-                  )
-                })}
-                {word &&
+                    )
+                  })}
+                  {modal && (
                     <Modal
-                    word={word}
-                    dictionaryResponse={dictionaryResponse}
-                    modalOpen={modalOpen}
-                    closeModal={closeModal}
-                />}
-              </div>
+                      word={word}
+                      dictionaryResponse={dictionaryResponse}
+                      modalOpen={modalOpen}
+                      closeModal={closeModal}
+                    />
+                  )}
+                </div>
+              )}
             </Stack>
           </div>
         </Container>
