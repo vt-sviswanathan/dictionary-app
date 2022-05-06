@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import Axios from 'axios'
 import { Container, Stack } from '@mui/material'
-import Navbar from '../components/Navbar'
-import Modal from '../components/Modal'
-import { UploadBtn, TransBtn, DefinitionBtn } from '../components/Butons'
 import {
   startEngine,
   jobStatus,
   jobResults,
-  generateAudioJobResults,
   parseAudioJobResults,
 } from '../api'
 import { TOKEN, GRAPHQL_URL } from '../../config'
+import { UploadBtn, TransBtn, DefinitionBtn } from '../components/Butons'
+import Navbar from '../components/Navbar'
+import Modal from '../components/Modal'
+import Loader from '../components/Loader2'
 
 declare global {
   interface Window {
@@ -30,6 +30,7 @@ const Index: React.FC = () => {
   const [transcribeDuration, setTranscribeDuration] = useState(0)
   const [scanBtn, setScanBtn] = useState(false)
   const [result, setResult] = useState(null)
+  const [loader, setLoader] = useState(false)
   const timer = 3500
 
   // const result = 'Testing PlayStation PlayStation,  PlayStation PlayStation test one two three'
@@ -115,6 +116,7 @@ const Index: React.FC = () => {
   }
 
   const handleTranscribe = () => {
+    setLoader(true)
     startEngine(file)
       .then(response => {
         const id = response.data.launchSingleEngineJob.id
@@ -134,17 +136,10 @@ const Index: React.FC = () => {
           clearInterval(poll)
 
           jobResults(id).then(res => {
-            const parsedResults = generateAudioJobResults(
-              parseAudioJobResults(res)
-            )
-
-            console.log('REsult REsult Result', parsedResults)
-            // needed this
-            // console.log('remove comaa 1111', parsedResults.replaceAll(',', ''))
-            //
-            // console.log('remove comaa', parsedResults.replace(/,/g, ''))
+            const parsedResults = parseAudioJobResults(res)
             setResult(parsedResults.filter(e => e !== ','))
             setIsFinished(true)
+            setLoader(false)
           })
         }
       })
@@ -152,7 +147,6 @@ const Index: React.FC = () => {
   }
 
   const wordSubmit = e => {
-    console.log('e.target.value', e.target.value)
     setWord(e.currentTarget.value)
     Axios.get(
       `https://www.dictionaryapi.com/api/v3/references/collegiate/json/${e.currentTarget.value}?key=851546ba-e972-4cc3-89f2-71ffc1ecfbe3`
@@ -174,7 +168,7 @@ const Index: React.FC = () => {
   console.log('results', result)
   return (
     <div id={'home'}>
-      <div className={!dictionaryResponse && 'backgroundImage'}>
+      <div className="backgroundImage">
         <Container>
           <Navbar />
           <div className="btnWrapper">
@@ -184,9 +178,12 @@ const Index: React.FC = () => {
                   upload file
                 </UploadBtn>
               ) : (
+                  <>
                 <TransBtn onClick={handleTranscribe} variant={'outlined'}>
                   {result ? 'Click the word to find the definitions' : 'Click to transcribe audio to text'}
                 </TransBtn>
+                    {loader && <Loader />}
+                </>
               )}
               {result && (
                 <div className="resultContainer">

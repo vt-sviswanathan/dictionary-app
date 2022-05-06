@@ -15,8 +15,9 @@ import {Button} from "@mui/material";
  const TransBtn = styled(Button)({
     height: '50px',
     border: '1px solid #42BCB6',
-     margin: '110px auto 20px',
+    margin: '60px auto 20px',
     display: 'block',
+    textTransform: 'inherit',
     backgroundColor: '#59D4CE',
     '&:hover': {
         backgroundColor: '#35938E',

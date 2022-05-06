@@ -16,19 +16,15 @@ const Modal: FC<Props> = ({
   modalOpen,
   closeModal,
 }) => {
-  console.log("Modal    ---")
-  console.log("Modal    --- word", {word, dictionaryResponse})
 
   // const data = dictionaryResponse.length !== 0 ? dictionaryResponse.data : ''
   const data = dictionaryResponse
 
-  console.log('def. data. shortdef data', data)
-
   return (
     <>
       <Dialog
-        fullWidth
-        maxWidth="sm"
+        // fullWidth
+        maxWidth="xs"
         open={modalOpen}
         scroll="paper"
         onClose={closeModal}
@@ -44,17 +40,17 @@ const Modal: FC<Props> = ({
           </IconButton>
           <div className="definitionContainer">
             <Container>
-              <h1 className="title">Definition of {word}</h1>
+              <h3 className="title">Definition of {word}</h3>
               {data.map((items, index) => (
                 <div key={index}>
-                  <h2
+                  <h4
                     className="functionalLabel"
                     style={{ textTransform: 'capitalize' }}
                   >
                     {items.fl}
-                  </h2>
+                  </h4>
                   {items.shortdef.map((item, itemIndex) => (
-                    <p key={itemIndex} className="di">
+                    <p key={itemIndex} className="itemDefinition">
                       {itemIndex + 1}. {item}
                     </p>
                   ))}

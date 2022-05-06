@@ -31,11 +31,8 @@ export const launchSingleEngineJob = (file_getUrl) => {
 }
 
 export const postGraphQlQuery = async (query) => {
-    console.log("query -------", query)
     try {
         const response = await window.gql(query.queryString)
-
-        console.log("postGraphQlQuery  responce", response)
         return response
     } catch (err) {
         console.log(err)
@@ -44,7 +41,6 @@ export const postGraphQlQuery = async (query) => {
 
 
 export const checkingStatusQuery = (targetId) => {
-    console.log("11111111111, checkingStatusQuery ", targetId)
     return {
         queryString: `query tdoJobStatus {
         temporalDataObject(id: "${targetId}") {
