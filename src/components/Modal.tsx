@@ -35,23 +35,13 @@ const [spanishWord, setSpanishWord] = useState('')
   // const data = dictionaryResponse.length !== 0 ? dictionaryResponse.data : ''
   const data = dictionaryResponse || ''
   const spanishData = spanishDictionaryResponse || ''
-  // console.log("spanish ", spanishData[0])
-  // if(spanishData[0]) {
-  //   // let word =[]
-  //   spanishData[0].map(items => {
-  //     console.log("test", items)
-  //     // console.log("items", items.shortdef)
-  //     // setSpanishWord(items)
-  //
-  //   })
-  //
-  // }
 
-  // console.log('spanishWord',spanishData[0])
+  const newData = spanishData && (spanishData[0].shortdef)
+
+  console.log('spanishWord', newData && newData)
   return (
     <>
       <Dialog
-        // fullWidth
         maxWidth="xs"
         open={modalOpen}
         scroll="paper"
@@ -68,17 +58,12 @@ const [spanishWord, setSpanishWord] = useState('')
           </IconButton>
           <div className="definitionContainer">
             <Container>
-              <h3 className="title" style={{color:'darkgray'}}>Definition of {word}</h3>
-              {/*{spanishData[0].map((data, i) => (*/}
-              {/*    <>*/}
-              {/*    <h3 className="title" style={{color:'garkgray'}}>*/}
-              {/*      In spanish*/}
-              {/*    </h3>*/}
-              {/*      <p>{data}</p>*/}
-              {/*    </>*/}
-
-              {/*))}*/}
-
+              <h3 style={{textTransform: 'capitalize'}}> Word is : {word}</h3>
+              <h3 className="title" style={{color:'#42bcb6'}}>In Spanish</h3>
+              {newData && newData.map((data, index) => (
+                    <p key={index}>{data}</p>
+              ))}
+              <h3 className="title" style={{color:'#42bcb6'}}>Definition is</h3>
               {data.map((items, index) => (
                 <div key={index}>
                   <h4
