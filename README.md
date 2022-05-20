@@ -54,5 +54,5 @@ You will also see any lint errors in the console.
 
 ## Screen Shots
 ![image description](img/path/in/repository/to/image.svg)
-<img src="img/app1.png" width="250"> 
-
+<img src="img/app1.png" width="250">
+app1.png

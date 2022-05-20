@@ -1,0 +1,15 @@
+.word {
+  text-transform: capitalize;
+}
+
+.defWord {
+  color: #42bcb6;
+}
+
+.title {
+  color: #ff3d00;
+}
+
+.spanish {
+  text-transform: capitalize;
+}

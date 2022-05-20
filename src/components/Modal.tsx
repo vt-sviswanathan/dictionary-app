@@ -5,6 +5,7 @@ import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 import { SPANISH_KEY } from '../../config'
 
+
 type Props = {
   word: string
   dictionaryResponse: any
@@ -58,12 +59,12 @@ const [spanishWord, setSpanishWord] = useState('')
           </IconButton>
           <div className="definitionContainer">
             <Container>
-              <h3 style={{textTransform: 'capitalize'}}> Word is : {word}</h3>
-              <h3 className="title" style={{color:'#42bcb6'}}>In Spanish</h3>
+              <h3 className="word"> Word is : <span className="defWord"> "{word}"</span></h3>
+              <h3 className="title">In Spanish:-</h3>
               {newData && newData.map((data, index) => (
-                    <p key={index}>{data}</p>
+                    <p key={index} className="spanish">{data}</p>
               ))}
-              <h3 className="title" style={{color:'#42bcb6'}}>Definition is</h3>
+              <h3 className="title">Definition is:-</h3>
               {data.map((items, index) => (
                 <div key={index}>
                   <h4

@@ -10,7 +10,7 @@
 // From the list, select "stage-veritone-session-id"
 // -> copy the uuid displayed in the "Cookie Value" panel.
 
-export const TOKEN = "2a7525c0-f9f3-471c-b99a-a08efa968736"
+export const TOKEN = "684e37e6-778a-4097-9527-d1ef0c66582f"
 
 export  const GRAPHQL_URL = "https://api.stage.us-1.veritone.com/v3/graphql"
 

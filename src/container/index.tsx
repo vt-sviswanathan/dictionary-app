@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Axios from 'axios'
-import { Container, Stack } from '@mui/material'
+import { Container, Stack, Typography } from '@mui/material'
 import {
   startEngine,
   jobStatus,
@@ -33,7 +33,6 @@ const Index: React.FC = () => {
   const [loader, setLoader] = useState(false)
   const [testData, setTestData] = useState(false)
   const timer = 3500
-
 
   useEffect(() => {
     window.aiware.init(
@@ -133,8 +132,7 @@ const Index: React.FC = () => {
       counter += timer
       jobStatus(tdoId, id).then(res => {
         const { status } = res.data.temporalDataObject.jobs.records[0]
-        console.log("Timer", timer, counter)
-
+        console.log('Timer', timer, counter)
 
         if (status === 'complete') {
           clearInterval(poll)
@@ -145,20 +143,18 @@ const Index: React.FC = () => {
             setIsFinished(true)
             setLoader(false)
           })
-        } else if( counter >= 80000) {
-        // } else if( counter >= 1000) {
+        // } else if (counter >= 80000) {
+          } else if( counter >= 500) {
 
           clearInterval(poll)
 
-          jobResults(id, {testData: true}).then(res => {
+          jobResults(id, { testData: true }).then(res => {
             const parsedResults = parseAudioJobResults(res)
             setResult(parsedResults.filter(e => e !== ','))
             setIsFinished(true)
             setLoader(false)
           })
         }
-
-
       })
     }, timer)
   }
@@ -169,12 +165,12 @@ const Index: React.FC = () => {
       `https://www.dictionaryapi.com/api/v3/references/collegiate/json/${e.currentTarget.value}?key=${DICTIONARY_KEY}`
     ).then(response => {
       if (response.status === 200) {
-        console.log("response ", response)
+        console.log('response ', response)
         setDictionaryResponse(response.data)
         setModal(true)
         closeModal()
       } else {
-        console.log("Api is not working")
+        console.log('Api is not working')
       }
     })
   }
@@ -183,6 +179,7 @@ const Index: React.FC = () => {
     setModalOpen(!modalOpen)
   }
 
+  console.log("REsult", result)
   return (
     <div id={'home'}>
       <div className="backgroundImage">
@@ -200,11 +197,29 @@ const Index: React.FC = () => {
                 </UploadBtn>
               ) : (
                 <>
-                  <TransBtn onClick={handleTranscribe} variant={'outlined'} data-test-id="trans-btn">
-                    {result
-                      ? 'Click the word to find the definitions'
-                      : 'Click to transcribe audio to text'}
-                  </TransBtn>
+                  {!result ? (
+                    <TransBtn
+                      onClick={handleTranscribe}
+                      variant={'outlined'}
+                      data-test-id="trans-btn"
+                    >
+                      Click to transcribe audio to text
+                    </TransBtn>
+                  ) : (
+                    <Typography
+                        variant="button"
+                        align="center"
+                        sx={{
+                          margin: '40px auto',
+                          fontWeight: '700',
+                          fontSize: '26px',
+                          color: '#ff3d00'
+                        }}
+                    >
+                      Click the word to find the definitions
+                    </Typography>
+                  )}
+
                   {loader && <Loader />}
                 </>
               )}
