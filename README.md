@@ -53,6 +53,6 @@ You will also see any lint errors in the console.
 
 
 ## Screen Shots
-![image description](img/path/in/repository/to/image.svg)
-<img src="img/app1.png" width="250">
-app1.png
+
+<img width="1532" alt="app1" src="https://user-images.githubusercontent.com/104032529/169425772-deaa47c8-5ec0-4ed0-b40d-e377de6508e8.png">
+
