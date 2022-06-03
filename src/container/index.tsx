@@ -7,6 +7,10 @@ import {
   jobResults,
   parseAudioJobResults,
 } from '../api'
+import { Dispatch } from 'redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchDefinitions } from '../redux/actions'
+import { RootState } from '../redux/reducers/rootReducer'
 import { TOKEN, GRAPHQL_URL, DICTIONARY_KEY } from '../../config'
 import { UploadBtn, TransBtn, DefinitionBtn } from '../components/Butons'
 import Navbar from '../components/Navbar'
@@ -33,6 +37,10 @@ const Index: React.FC = () => {
   const [loader, setLoader] = useState(false)
   const [testData, setTestData] = useState(false)
   const timer = 3500
+  const dispatch = useDispatch()
+  const { defResult } = useSelector(
+      (state: RootState) => state.result
+  );
 
   useEffect(() => {
     window.aiware.init(
@@ -143,9 +151,8 @@ const Index: React.FC = () => {
             setIsFinished(true)
             setLoader(false)
           })
-        // } else if (counter >= 80000) {
-          } else if( counter >= 500) {
-
+          // } else if (counter >= 80000) {
+        } else if (counter >= 200) {
           clearInterval(poll)
 
           jobResults(id, { testData: true }).then(res => {
@@ -160,9 +167,16 @@ const Index: React.FC = () => {
   }
 
   const wordSubmit = e => {
-    setWord(e.currentTarget.value)
+    let word = e.currentTarget.value
+    setWord(word)
+    // dispatch(setDefinitionWord(word))
+    // console.log("testsetse 11111")
+    //
+    // dispatch(getDefinitions)
+    console.log('testsetse 22222')
+
     Axios.get(
-      `https://www.dictionaryapi.com/api/v3/references/collegiate/json/${e.currentTarget.value}?key=${DICTIONARY_KEY}`
+      `https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}?key=${DICTIONARY_KEY}`
     ).then(response => {
       if (response.status === 200) {
         console.log('response ', response)
@@ -179,7 +193,7 @@ const Index: React.FC = () => {
     setModalOpen(!modalOpen)
   }
 
-  console.log("REsult", result)
+  console.log('REsult', result)
   return (
     <div id={'home'}>
       <div className="backgroundImage">
@@ -207,14 +221,14 @@ const Index: React.FC = () => {
                     </TransBtn>
                   ) : (
                     <Typography
-                        variant="button"
-                        align="center"
-                        sx={{
-                          margin: '40px auto',
-                          fontWeight: '700',
-                          fontSize: '26px',
-                          color: '#ff3d00'
-                        }}
+                      variant="button"
+                      align="center"
+                      sx={{
+                        margin: '40px auto',
+                        fontWeight: '700',
+                        fontSize: '26px',
+                        color: '#ff3d00',
+                      }}
                     >
                       Click the word to find the definitions
                     </Typography>
