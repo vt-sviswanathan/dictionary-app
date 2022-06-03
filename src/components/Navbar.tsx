@@ -2,7 +2,7 @@ import React from "react";
 
 const Navbar = () => {
     return(
-        <div className="navbar test11111">
+        <div className="navbar">
             <h1>
                 Let&apos;s find the definitions!
             </h1>
